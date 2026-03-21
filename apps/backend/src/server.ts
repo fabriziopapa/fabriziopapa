@@ -13,6 +13,15 @@ fastify.register(fastifyStatic, {
   root: join(__dirname, '../../frontend/dist'),
   prefix: '/',
   wildcard: false,
+  setHeaders: (res, path) => {
+    if (path.endsWith('index.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
 });
 
 // Fallback per SPA (React Router)
